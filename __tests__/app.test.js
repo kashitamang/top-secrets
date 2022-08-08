@@ -51,15 +51,12 @@ describe('top-secrets routes', () => {
     });
   });
 
-  it('returns the current user', async () => {
-    const [agent, user] = await registerAndLogin();
-    const me = await agent.get('/api/v1/users/me');
-
-    expect(me.body).toEqual({
-      ...user,
-      exp: expect.any(Number),
-      iat: expect.any(Number),
-    });
+  it('signs in an existing user', async () => {
+    await request(app).post('/api/v1/users').send(testUser);
+    const res = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'test@example.com', password: '12345' });
+    expect(res.status).toEqual(200);
   });
   
 });
