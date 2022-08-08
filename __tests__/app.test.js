@@ -12,7 +12,7 @@ const testUser = {
   password: 'testing',
 };
 
-const registerAndLogin = async (userProps = {})=> {
+const registerAndLogin = async (userProps = {}) => {
   const password = userProps.password ?? testUser.password;
   //create an "agent" that gives us the ability to store cookies between requests in a test
   const agent = request.agent(app);
@@ -55,8 +55,9 @@ describe('top-secrets routes', () => {
     await request(app).post('/api/v1/users').send(testUser);
     const res = await request(app)
       .post('/api/v1/users/sessions')
-      .send({ email: 'test@example.com', password: '12345' });
+      .send({ email: 'test@test.com', password: 'testing' });
     expect(res.status).toEqual(200);
   });
+  
   
 });
