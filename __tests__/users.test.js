@@ -1,0 +1,47 @@
+const pool = require('../lib/utils/pool');
+const setup = require('../data/setup');
+const request = require('supertest');
+const app = require('../lib/app');
+
+//dummy user for testing purposes
+const testUser = {
+  firstName: 'Test',
+  lastName: 'User',
+  email: 'test@test.com',
+  password: 'testing',
+};
+
+describe('top-secrets routes', () => {
+  beforeEach(() => {
+    return setup(pool);
+  });
+
+  it('example test - delete me!', () => {
+    expect(1).toEqual(1);
+  });
+
+  afterAll(() => {
+    pool.end();
+  });
+
+  it('creates a new user', async () => {
+    const res = await request(app).post('/api/v1/users').send(testUser);
+    const { firstName, lastName, email } = testUser;
+
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      firstName,
+      lastName,
+      email,
+    });
+  });
+
+  it('signs in an existing user', async () => {
+    await request(app).post('/api/v1/users').send(testUser);
+    const res = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'test@test.com', password: 'testing' });
+    expect(res.status).toEqual(200);
+  });
+
+});

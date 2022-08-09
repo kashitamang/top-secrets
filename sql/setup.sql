@@ -15,6 +15,9 @@ CREATE TABLE secrets (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title TEXT,
     description TEXT, 
-    created_at TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO secrets (title, description) VALUES
+  ('toxic trait 1', 'i like the way my dogs feet smell like a frito factory'),
+  ('toxic trait 2', 'i gossip about how people gossip');
