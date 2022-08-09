@@ -10,19 +10,16 @@ const testUser = {
   email: 'test@test.com',
   password: 'testing',
 };
-  
 
 const registerAndLogin = async (userProps = {}) => {
   const password = userProps.password ?? testUser.password;
-  //create an "agent" that gives us the ability to store cookies between requests in a test
+  
   const agent = request.agent(app);
-    
-  //create a user to sign in with 
+  
   const user = await UserService.create({ ...testUser, ...userProps });
   
-  //then sign in 
   const { email } = user;
-  await (await agent.post('./api/v1/secrets/sessions')).setEncoding({ email, password });
+  await agent.post('/api/v1/users/sessions').send({ email, password });
   return [agent, user];
 };
 
@@ -36,10 +33,10 @@ describe('backend-express-template routes', () => {
     expect(res.status).toEqual(401);
   });
 
-  it('/secrets should return the current user if authenticated', async () => {
+  it('#GET protected /secrets should return list of secrets for auth user', async () => {
     const [agent] = await registerAndLogin();
     const res = await agent.get('/api/v1/secrets');
-    expect(res.status).toEqual(200);
+    expect(res.status).toBe(200);
   });
 
   afterAll(() => {
