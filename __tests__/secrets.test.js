@@ -40,12 +40,13 @@ describe('backend-express-template routes', () => {
   });
 
   it('#POST should add a new secret if user is logged in', async () => {
-    const agent = await registerAndLogin();
     const newSecret = {
       title: 'Lindsey Lohan',
       description: 'Shes just a little bossy'
     };
+    const [agent] = await registerAndLogin();
     const res = await agent.post('/api/v1/secrets').send(newSecret);
+
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
       id: expect.any(String),
