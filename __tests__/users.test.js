@@ -24,7 +24,7 @@ describe('top-secrets routes', () => {
     pool.end();
   });
 
-  it('creates a new user', async () => {
+  it('#POST creates a new user', async () => {
     const res = await request(app).post('/api/v1/users').send(testUser);
     const { firstName, lastName, email } = testUser;
 
@@ -36,7 +36,7 @@ describe('top-secrets routes', () => {
     });
   });
 
-  it('signs in an existing user', async () => {
+  it('#POST signs in an existing user', async () => {
     await request(app).post('/api/v1/users').send(testUser);
     const res = await request(app)
       .post('/api/v1/users/sessions')
@@ -44,7 +44,7 @@ describe('top-secrets routes', () => {
     expect(res.status).toEqual(200);
   });
 
-  it('signs out a user', async () => {
+  it('#DELETE signs out a user', async () => {
     await request(app).post('/api/v1/users').send(testUser);
     await request(app).post('/api/v1/users/sessions').send(testUser);
     const res = await request(app).delete('/api/v1/users/sessions');
